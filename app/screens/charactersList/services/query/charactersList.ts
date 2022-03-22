@@ -20,6 +20,8 @@ export const GET_CHARACTERS = gql`
         type
         image
         gender
+        species
+        status
       }
     }
   }

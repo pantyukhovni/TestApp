@@ -23,13 +23,13 @@ export type FilterCharacter = {
 }
 
 export interface CharactersResponse {
-  characters: {
-    info: Info,
-    results: Characters[]
-  }
+  info: Info,
+  results: Characters[]
 };
 
 export interface CharactersRequest {
   page?: string,
   filter?: FilterCharacter
 }
+
+export type CharacterStatus = 'Dead' | 'unknown' | 'Alive'

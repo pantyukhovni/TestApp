@@ -5,14 +5,18 @@ import { getCharacters } from '../../screens/charactersList/services/getCharacte
 
 const sliceName = 'characters';
 
+
+// type CharactersList = Omit<Characters, 'id' | 'episode'>;
 export interface CharactersState {
   loading: boolean,
+  error: unknown,
   characters: Characters[],
   info: Info
 }
 
 const initialState: CharactersState = {
   loading: false,
+  error: null,
   characters: [],
   info: {
     count: 0,
@@ -23,19 +27,12 @@ const initialState: CharactersState = {
 }
 
 
-export const fetchCharacters = createAsyncThunk<
-  CharactersResponse,
-  CharactersRequest
->(
+export const fetchCharacters = createAsyncThunk(
   `${sliceName}/fetchCharacters`,
-  async ({ page, filter }) => {
-    let hasFilters;
-    if (filter) {
-      hasFilters = Object.keys(filter).length
-    }
+  async () => {
 
     const charactersData = await getCharacters();
-    console.log('charactersData', charactersData);
+
     return charactersData;
   }
 );
@@ -50,14 +47,29 @@ const slice = createSlice({
         state.loading = true;
       })
       .addCase(fetchCharacters.fulfilled, (state, { payload: charactersData }) => {
+
         state.loading = false;
 
-        // TODO: нормализовать и сохранить данные
-        console.log('HERE', charactersData);
+        const {
+          info,
+          results
+        } = charactersData;
+
+        // TODO: нормализация стора
+        // const newResults = results.map(({
+        //   episode,
+        //   id,
+        //   ...otherSettings
+        // }) => ({
+        //   [id]: otherSettings
+        // }));
+
+        state.characters = results;
+        state.info = info;
       })
       .addCase(fetchCharacters.rejected, (state, { error }) => {
         state.loading = false;
-        console.log('error', error);
+        state.error = error;
       })
   }
 });
