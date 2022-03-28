@@ -1,12 +1,12 @@
 import React, {forwardRef} from 'react';
-import type {ForwardedRef, ReactNode, HTMLAttributes} from 'react';
-import {Text, StyleSheet, StyleProp} from 'react-native';
+import type {ForwardedRef, ReactNode, } from 'react';
+import {Text, StyleSheet, StyleProp, TextProps} from 'react-native';
 import type {TextStyle} from 'react-native';
 import COLORS from '../palette/color';
 
 export interface BasicVuiTypographyProps
-  extends HTMLAttributes<HTMLDivElement> {
-  children: ReactNode;
+  extends TextProps {
+  children: ReactNode; // string Rext
   styles?: StyleProp<TextStyle>;
 }
 
@@ -14,7 +14,7 @@ const VuiTypography = forwardRef(function VuiTypography(
   {children, styles: customStyles, ...otherProps}: BasicVuiTypographyProps,
   ref: ForwardedRef<any>, // TODO: исправить,
 ): JSX.Element {
-  console.log('customStyles', customStyles);
+
   return (
     <Text {...otherProps} ref={ref} style={[styles.typography, customStyles]}>
       {children}

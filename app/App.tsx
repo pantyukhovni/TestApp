@@ -14,17 +14,22 @@ import {NativeBaseProvider} from 'native-base';
 import {store} from './redux/store';
 import client from './services/apollo';
 import RootNavigation from './navigation/RootNavigation';
+import {PersistGate} from 'redux-persist/integration/react';
+import persistStore from 'redux-persist/es/persistStore';
+const persistor = persistStore(store);
 
-const App = (): JSX.Element => {
+const App = () => {
   return (
     <Provider store={store}>
-      <ApolloProvider client={client}>
-        <NativeBaseProvider>
-          <NavigationContainer>
-            <RootNavigation />
-          </NavigationContainer>
-        </NativeBaseProvider>
-      </ApolloProvider>
+      <PersistGate persistor={persistor}>
+        <ApolloProvider client={client}>
+          <NativeBaseProvider>
+            <NavigationContainer>
+              <RootNavigation />
+            </NavigationContainer>
+          </NativeBaseProvider>
+        </ApolloProvider>
+      </PersistGate>
     </Provider>
   );
 };

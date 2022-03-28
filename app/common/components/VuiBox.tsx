@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useMemo} from 'react';
 import type {ForwardedRef, ReactNode, HTMLAttributes} from 'react';
 import type {StyleProp, TextStyle} from 'react-native';
 import {View, StyleSheet} from 'react-native';
@@ -8,6 +8,15 @@ export interface BasicVuiBoxProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   styles?: StyleProp<TextStyle>;
 }
+
+const useStyles = (...styles: unknown[]) => {
+  return useMemo(
+    () => ({
+      // styles
+    }),
+    [styles],
+  );
+};
 
 const VuiBox = forwardRef(function VuiBox(
   {bgColor, children, styles: customStyles, ...otherProps}: BasicVuiBoxProps,

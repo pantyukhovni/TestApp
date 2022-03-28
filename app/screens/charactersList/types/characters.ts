@@ -4,7 +4,7 @@ import { Info } from './info';
 export type Characters = {
   id: string,
   name: string,
-  status: string,
+  status: CharacterStatus,
   species: string,
   type: string,
   gender: string,

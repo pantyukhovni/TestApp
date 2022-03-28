@@ -5,13 +5,13 @@ import { getCharacters } from '../../screens/charactersList/services/getCharacte
 
 const sliceName = 'characters';
 
-
-// type CharactersList = Omit<Characters, 'id' | 'episode'>;
 export interface CharactersState {
   loading: boolean,
   error: unknown,
   characters: Characters[],
   info: Info
+  charactersIdsList: string[]
+  characterRecord: Record<string, Characters>
 }
 
 const initialState: CharactersState = {
@@ -23,11 +23,13 @@ const initialState: CharactersState = {
     next: 0,
     pages: 0,
     prev: 0
-  }
+  },
+  characterRecord: {},
+  charactersIdsList: []
 }
 
 
-export const fetchCharacters = createAsyncThunk(
+export const fetchCharacters = createAsyncThunk<CharactersResponse, CharactersRequest>(
   `${sliceName}/fetchCharacters`,
   async () => {
 
@@ -63,6 +65,15 @@ const slice = createSlice({
         // }) => ({
         //   [id]: otherSettings
         // }));
+        state.charactersIdsList = results.map(({ id }) => id);
+        state.characterRecord = results.reduce((acc, current) => {
+          // acc[current.id] = current
+          acc = {
+            ...acc,
+            [current.id]: current
+          }
+          return acc;
+        }, {});
 
         state.characters = results;
         state.info = info;

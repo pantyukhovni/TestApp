@@ -6,6 +6,8 @@ interface OwnProps {
   label?: string;
 }
 
+// TODO: это не сплаш скрин
+
 const SplashScreen = ({label}: OwnProps) => {
   return (
     <Box

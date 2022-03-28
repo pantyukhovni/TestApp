@@ -1,25 +1,25 @@
-import React from 'react';
-import {SafeAreaView, FlatList} from 'react-native';
-import {Text} from 'native-base';
+import React, {useMemo} from 'react';
+import {SafeAreaView, FlatList, ListRenderItemInfo, Text} from 'react-native';
 import {useSelector} from '../../redux/store';
 import {
-  getCharactersList,
-  getLoadingStatus,
+  charactersListSelector,
+  loadingStatusSelector,
 } from '../../redux/selectors/characters';
 import VuiBox from '../../common/components/VuiBox';
-import CharacterCard from './components/characterCard';
+import Character from './components/characterCard';
 import COLORS from '../../common/palette/color';
 import SplashScreen from '../../common/components/SplashScreen';
+import {Characters} from './types/characters';
 
 const CharacterList = () => {
-  const charactersList = useSelector(getCharactersList);
-  const loading = useSelector(getLoadingStatus);
+  const charactersList = useSelector(charactersListSelector);
+  const loading = useSelector(loadingStatusSelector);
 
+  // TODO: заменить на спиннер
   if (loading) return <SplashScreen label="Загрузка" />;
 
-  // TODO: убрать any
-  const renderItem = ({item}: any) => {
-    return <CharacterCard {...item} />;
+  const renderItem = ({item}: ListRenderItemInfo<Characters>) => {
+    return <Character {...item} />;
   };
 
   return (

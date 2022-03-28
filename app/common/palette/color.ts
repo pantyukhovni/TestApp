@@ -3,8 +3,10 @@ const COLORS = {
   green: '#55cc44',
   grey: '#24282f',
   darkGrey: '#202329',
-  white: '#fff',
-  paleGrey: '#3c3e44'
+  white: '#ffffff',
+  paleGrey: '#3c3e44',
+  pink: '#EA1D82',
+  black: '#000000'
 };
 
 export default COLORS;

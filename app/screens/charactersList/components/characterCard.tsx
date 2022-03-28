@@ -1,52 +1,38 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
-import {Box} from 'native-base';
-import CharacterImg from './characterImg';
-import StatusIndicator from './statusIndicator';
-import type {CharacterStatus} from '../types/characters';
-import COLORS from '../../../common/palette/color';
-import VuiTypography from '../../../common/components/VuiTypography';
+import React, {useCallback, useState} from 'react';
+import {useNavigation, NavigationProp} from '@react-navigation/core';
+import {useDispatch} from '../../../redux/store';
+import {add, deleteFavorite} from '../../../redux/slices/favorites';
+import type {Characters} from '../types/characters';
+import CharacterCard from '../../../common/components/characterCard';
+import {CharacterParamList} from 'app/navigation/types';
 
-interface OwnProps {
-  name: string;
-  image: string;
-  status: CharacterStatus;
-  gender: string;
-  species: string;
-}
+const Character = (props: Characters) => {
+  const {id} = props;
+  // TODO: забрать персонажа из нормализованного стора
+  const navigation = useNavigation<NavigationProp<CharacterParamList>>();
+  const dispatch = useDispatch();
 
-const CharacterCard = ({name, status, species, gender, image}: OwnProps) => {
+  const [isFavorite, setFavorite] = useState<boolean>(false);
+
+  const goToCurrentCharacter = useCallback(() => {
+    navigation.navigate('Character', {id}); // TODO: типизировать
+  }, [id]);
+
+  const addFavorites = useCallback(() => {
+    setFavorite(prev => !prev);
+
+    if (!isFavorite) dispatch(add({id}));
+    else dispatch(deleteFavorite({id}));
+  }, [id, isFavorite]);
+
   return (
-    <Box
-      flex="1"
-      flexDirection="row"
-      marginBottom={4}
-      backgroundColor={COLORS.paleGrey}
-      borderRadius={10}>
-      <CharacterImg img={image} />
-      <Box padding={5} maxWidth={220}>
-        <VuiTypography styles={styles.nameCharacter}>{name}</VuiTypography>
-        <Box
-          flex="1"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center">
-          <StatusIndicator status={status} />
-          <VuiTypography>{species}</VuiTypography>
-        </Box>
-        <Box flex="1">
-          <VuiTypography>Gender:</VuiTypography>
-          <VuiTypography>{gender}</VuiTypography>
-        </Box>
-      </Box>
-    </Box>
+    <CharacterCard
+      {...props}
+      isFavorite={isFavorite}
+      goToScreen={goToCurrentCharacter}
+      toggleFavorite={addFavorites}
+    />
   );
 };
 
-const styles = StyleSheet.create({
-  nameCharacter: {
-    fontSize: 18,
-  },
-});
-
-export default CharacterCard;
+export default Character;
